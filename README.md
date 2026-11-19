@@ -9,23 +9,38 @@ This fork adds a **native Linux build of Fable II that renders with Vulkan**, tu
 
 ## Results on a Steam Deck OLED
 
-Gaming Mode, together with the SDK fork; medians of unattended runs from the same save.
+Gaming Mode, together with the SDK fork; medians of unattended runs from the same save (the standing market figure is from a play session).
 
 | | Before | Now |
 |---|---|---|
 | Busy village scene, many NPCs | 33-35 fps | **52.4 fps** |
 | Lighter areas | 45-55 fps | 60 fps (cap) |
 | Bowerstone market, turning the camera | 43.9 fps, 38 stutters of 70 ms+ in 2 min | **50.0 fps, no stutters** |
+| Bowerstone market, standing | about 51 fps | **60 fps** (cap, SDK v4) |
+| Bowerstone Inn, upstairs room | 37-43 fps | **60 fps** (cap, SDK v4) |
 
 No visual differences from the Windows/D3D12 build that we could find.
 
-## What changed, in short
+## Changes
 
-- **Linux build:** `build.sh` (Clang 20; Deck CPU target, PGO and LTO options), `run.sh`, a portable ~40 MB package with `Fable2.sh`, and `Linux.md`.
-- **Performance:** game code compiled with a profile recorded on the Deck (+2.5 fps); threads that busy-waited now sleep briefly (game thread spinning 48% → 4%); the Lua garbage collector runs as native code; 60 fps cap on Linux.
-- **Input:** keyboard and mouse as a gamepad on Linux.
-- **Display:** menus keep their layout on the Deck's 16:10 screen instead of overlapping.
-- **Console:** `quit` and `screenshot`, for unattended test runs.
+Every change on the game side that made it faster or fixed a bug, with its approximate effect on the Deck. Most of the frame rate gains are in the [SDK fork](https://github.com/darokk/rexglue-sdk#changes).
+
+### Performance
+- **60 fps cap on Linux** (`[perf] fps_limit`): the game's frame limiter allows 60 fps instead of 30 by default, so lighter areas and interiors run at 60.
+- **Profile-guided optimisation of the game code** (`--game-pgo-use`, v2): the recompiled code is compiled with a profile recorded on the Deck, busy village 50.0 → 52.5 fps.
+- **Idle-spin backoff** (`[perf] idle_yield_sleep_us`): guest threads that wait by yielding in a loop sleep briefly instead of spinning, game thread spinning 48% → 4%, which leaves more of the 15 W power budget to the GPU and render thread.
+- **Native Lua garbage collector** (`[perf] native_lua_gc`): the collector's mark and sweep, about half of the game thread's time in busy areas, run as native code.
+- **No GPU frame sync outside Windows** (`gpu_frame_sync`): the CPU no longer waits for the GPU at the start of every frame.
+- **Photo mode panel registered only while photo mode is on**: the window no longer repaints at the display refresh rate, which had presented every frame twice (FPS overlays read 90 on the Deck).
+
+### Bug fixes
+- **Menus overlapping on the Deck's 16:10 screen** (v3): book menus keep their layout instead of the menu column hiding the right-hand page.
+- **Hero and dog textures and black eyes on Vulkan**: realtime texture morphing is on by default on Vulkan too (with the SDK's exponent fix).
+- **Config tests**: settings with platform-dependent defaults are staged so the tests pass, with unchanged behaviour (v3).
+
+### Linux support
+- Native Linux (Vulkan) build with `build.sh` (Clang 20; Deck CPU target, PGO and LTO options), `run.sh`, a portable ~40 MB package with `Fable2.sh`, and `Linux.md`.
+- Keyboard and mouse as a gamepad on Linux.
 
 ## Patch notes
 
@@ -34,7 +49,7 @@ Each entry is one update pushed to `steam-deck-linux`.
 ### v3 · 2026-11-18 (evening) · Deck menu layout, config tests
 - Menus fit the Steam Deck's 16:10 screen: the menu column no longer overlaps the right-hand page and hides its text (pause menu, property screens).
 - Settings with platform-dependent defaults are staged so the config tests pass; behaviour is unchanged.
-- The camera-turn stutter fix of 2026-11-19 is in the SDK fork (v3 there) and needs no change here.
+- The camera-turn stutter fix (SDK v3) and the occlusion query fix (SDK v4), both of 2026-11-19, are in the SDK fork and need no change here.
 
 ### v2 · 2026-11-18 · game-code PGO, console quit/screenshot
 - Profile-guided optimization of the game code: busy village 50.0 → 52.5 fps on the Deck.
