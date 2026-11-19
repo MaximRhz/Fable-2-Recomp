@@ -1,3 +1,57 @@
+# Fable 2 Recomp: Steam Deck (Linux/Vulkan) fork
+
+This fork adds a **native Linux build of Fable II that renders with Vulkan**, tuned for the **Steam Deck**: build script, portable package, keyboard/mouse input, performance work on the game side, and a menu layout for the Deck's 16:10 screen.
+
+- **Code:** branch [`steam-deck-linux`](https://github.com/darokk/Fable-2-Recomp/tree/steam-deck-linux). This `master` branch only carries this page.
+- **How to build and install on the Deck:** [`Linux.md`](https://github.com/darokk/Fable-2-Recomp/blob/steam-deck-linux/Linux.md) on that branch. You need your own copy of the game.
+- **Pull request upstream:** [himdo/Fable-2-Recomp#202](https://github.com/himdo/Fable-2-Recomp/pull/202), with the full breakdown.
+- **Needs the SDK fork:** [darokk/rexglue-sdk](https://github.com/darokk/rexglue-sdk), branch `steam-deck-vulkan` ([himdo/rexglue-sdk#34](https://github.com/himdo/rexglue-sdk/pull/34)). Build with `./build.sh --sdk ../rexglue-sdk`.
+
+## Results on a Steam Deck OLED
+
+Gaming Mode, together with the SDK fork; medians of unattended runs from the same save.
+
+| | Before | Now |
+|---|---|---|
+| Busy village scene, many NPCs | 33-35 fps | **52.4 fps** |
+| Lighter areas | 45-55 fps | 60 fps (cap) |
+| Bowerstone market, turning the camera | 43.9 fps, 38 stutters of 70 ms+ in 2 min | **50.0 fps, no stutters** |
+
+No visual differences from the Windows/D3D12 build that we could find.
+
+## What changed, in short
+
+- **Linux build:** `build.sh` (Clang 20; Deck CPU target, PGO and LTO options), `run.sh`, a portable ~40 MB package with `Fable2.sh`, and `Linux.md`.
+- **Performance:** game code compiled with a profile recorded on the Deck (+2.5 fps); threads that busy-waited now sleep briefly (game thread spinning 48% → 4%); the Lua garbage collector runs as native code; 60 fps cap on Linux.
+- **Input:** keyboard and mouse as a gamepad on Linux.
+- **Display:** menus keep their layout on the Deck's 16:10 screen instead of overlapping.
+- **Console:** `quit` and `screenshot`, for unattended test runs.
+
+## Patch notes
+
+Each entry is one update pushed to `steam-deck-linux`.
+
+### v3 · 2026-11-18 (evening) · Deck menu layout, config tests
+- Menus fit the Steam Deck's 16:10 screen: the menu column no longer overlaps the right-hand page and hides its text (pause menu, property screens).
+- Settings with platform-dependent defaults are staged so the config tests pass; behaviour is unchanged.
+- The camera-turn stutter fix of 2026-11-19 is in the SDK fork (v3 there) and needs no change here.
+
+### v2 · 2026-11-18 · game-code PGO, console quit/screenshot
+- Profile-guided optimization of the game code: busy village 50.0 → 52.5 fps on the Deck.
+- Console `quit` and `screenshot [path]`; optional `launch_env` file for test settings.
+
+### v1 · 2026-11-17 · first version
+- Linux (Vulkan) build, portable package and `Linux.md`.
+- Keyboard and mouse input on Linux.
+- Idle-spin backoff, native Lua GC, 60 fps cap on Linux.
+- Photo mode panel no longer makes the window repaint at the display refresh rate.
+- Realtime texture morphing on by default on Vulkan.
+- With SDK v1: busy village 33-35 → 48.6 fps.
+
+---
+
+*Below: the upstream README.*
+
 # Fable 2 — ReXGlue Recompiled Project
 First and for most this project was made to test the capabilities of local and open source AI. This project was made using Qwen3.8 27b. After about an hour it got the game running. Then after a large amount of human trial and error I was able to get enough of the functions mapped to be able to complete the game. I currently do not consider this to be fully complete as I have yet to 100% the game. The sha256 of the iso that started this project is: "685a0d3bea9718812f17bcd155907a5359a548b6d3d8342dd2a6c944f45e35ff" and its the Fable 2 GOTY for USA and Europe.
 
