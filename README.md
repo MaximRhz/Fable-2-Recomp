@@ -39,10 +39,29 @@ Delete the `Fable2-SteamDeck` folder (it holds everything: game files, saves, se
 
 ## Playing
 
-- **Controls:** the Deck's controls work like an Xbox 360 controller, with the Steam Deck's own buttons shown in the game's prompts. In Desktop Mode, keyboard and mouse work too, with mouse look; the key bindings are listed in the `README.md` inside the package and can be changed in `fable2_config.toml`.
+- **Controls:** the Deck's controls work like an Xbox 360 controller, with the Steam Deck's own buttons shown in the game's prompts. In Desktop Mode, keyboard and mouse work too (see [Keyboard and mouse](#keyboard-and-mouse)).
 - **Saves** are kept in `Fable2-SteamDeck/saves`. Back up that folder to keep your progress.
 - **First visits:** the first time an area loads, its shaders are compiled, which can cause brief stalls. Later visits are smooth.
 - **Battery and frame rate:** the game runs at up to 60 fps. For a steadier rate in the heaviest areas, or longer battery life, set the Quick Access Menu's Performance tab to 40 Hz with a 40 fps limit.
+
+### Keyboard and mouse
+
+Keyboard and mouse act as a gamepad (together with a real one), with mouse look: moving the mouse turns the camera.
+
+| Key | Game input |
+|---|---|
+| `W` `A` `S` `D` | Move (left stick) |
+| Left mouse button | `X` (melee) |
+| Right mouse button | `Y` (ranged) |
+| Middle mouse button / `B` | `B` (will) |
+| `Shift` / `E` | `A` |
+| `Q` / `R` | Left / right trigger |
+| `Z` / `Tab` | Left / right shoulder |
+| Arrow keys | D-pad |
+| `Escape` | Start (pause menu) |
+| `M` | Back |
+
+To remap, edit `keyboard_gamepad_map` under `[input]` in `fable2_config.toml` (format `Key:Button,Key:Button,...`); the mouse look settings are in the same section. The details are in [UPSTREAM-README.md](https://github.com/darokk/Fable-2-Recomp/blob/steam-deck-linux/UPSTREAM-README.md#keyboard-controls).
 
 ### Known issues
 
@@ -117,7 +136,7 @@ On top of Fable 2 Recomp and its native Linux build, with the renderer work in t
 
 ## Building from source
 
-The code is on the [`steam-deck-linux`](https://github.com/darokk/Fable-2-Recomp/tree/steam-deck-linux) branch (this `master` branch carries this page). It builds with the SDK fork [darokk/rexglue-sdk](https://github.com/darokk/rexglue-sdk) (branch `steam-deck-vulkan`); [Linux.md](https://github.com/darokk/Fable-2-Recomp/blob/steam-deck-linux/Linux.md) has the full instructions, including the Deck package (`./build.sh --cpu deck package`) and building on the Deck itself.
+The code is on the [`steam-deck-linux`](https://github.com/darokk/Fable-2-Recomp/tree/steam-deck-linux) branch (this `master` branch carries this page). It builds with the SDK fork [darokk/rexglue-sdk](https://github.com/darokk/rexglue-sdk) (branch `steam-deck-vulkan`); [Linux.md](https://github.com/darokk/Fable-2-Recomp/blob/steam-deck-linux/Linux.md) has the full instructions, including the Deck package (`./build.sh --cpu deck package`) and building on the Deck itself. The developer documentation of the main project (user config, in-game console, F5 Lua scripts, tracing, remote control) is in [UPSTREAM-README.md](https://github.com/darokk/Fable-2-Recomp/blob/steam-deck-linux/UPSTREAM-README.md).
 
 ## Credits
 
