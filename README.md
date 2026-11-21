@@ -3,9 +3,20 @@
 This fork adds a **native Linux build of Fable II that renders with Vulkan**, tuned for the **Steam Deck**: build script, portable package, keyboard/mouse input, performance work on the game side, and a menu layout for the Deck's 16:10 screen.
 
 - **Code:** branch [`steam-deck-linux`](https://github.com/darokk/Fable-2-Recomp/tree/steam-deck-linux). This `master` branch only carries this page.
-- **How to build and install on the Deck:** [`Linux.md`](https://github.com/darokk/Fable-2-Recomp/blob/steam-deck-linux/Linux.md) on that branch. You need your own copy of the game.
+- **Play it on a Steam Deck:** download the ready-made package from [Releases](https://github.com/darokk/Fable-2-Recomp/releases/latest), see [Install on a Steam Deck](#install-on-a-steam-deck) below. You need your own copy of the game.
+- **Build it yourself:** [`Linux.md`](https://github.com/darokk/Fable-2-Recomp/blob/steam-deck-linux/Linux.md) on that branch.
 - **Pull request upstream:** [himdo/Fable-2-Recomp#202](https://github.com/himdo/Fable-2-Recomp/pull/202), with the full breakdown.
 - **Needs the SDK fork:** [darokk/rexglue-sdk](https://github.com/darokk/rexglue-sdk), branch `steam-deck-vulkan` ([himdo/rexglue-sdk#34](https://github.com/himdo/rexglue-sdk/pull/34)). Build with `./build.sh --sdk ../rexglue-sdk`.
+
+## Install on a Steam Deck
+
+No building needed. You need your own copy of **Fable II Game of the Year Edition** as a disc image (`.iso`); the package holds no game content.
+
+1. Download `Fable2-SteamDeck-<version>.tar.gz` from the [latest release](https://github.com/darokk/Fable-2-Recomp/releases/latest).
+2. On the Deck, in **Desktop Mode**, move it to `~/Games/` and extract it there (right-click → *Extract* → *Extract archive here*). Put your Fable II `.iso` in `~/Downloads` (the new `Fable2-SteamDeck` folder or an SD card work too).
+3. Double-click `Fable2.sh` in the `Fable2-SteamDeck` folder (choose *Execute*). On the first start it finds your disc image, extracts the game files (about 6.7 GB, a few minutes) and offers to add **Fable II** to your Steam library. From then on, start it from Gaming Mode like any other game.
+
+Requires SteamOS 3.6 or newer. **Updating:** extract a newer release over the `Fable2-SteamDeck` folder; your saves, game files and shader cache are kept (back up `fable2_config.toml` first if you changed settings). Each release's notes list what changed.
 
 ## Results on a Steam Deck OLED
 
